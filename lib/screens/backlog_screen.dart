@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:primaryscreen/widgets/game_card.dart';
 
 import '../models/game.dart';
-import '../widgets/game_collection.dart';
 import '../widgets/search_field.dart';
 import '../widgets/status_filter_bar.dart';
-import '../widgets/summary_bar.dart';
-import '../widgets/tag_filter_bar.dart';
-import '../widgets/view_toggle.dart';
-
 /// Primary screen
 /// query, status filter, tag filter, grid/list mode, and the games.
 class BacklogScreen extends StatefulWidget {
@@ -21,14 +17,7 @@ class _BacklogScreenState extends State<BacklogScreen> {
   String _query = '';
   GameStatus? _selectedStatus; 
   String? _selectedTag; 
-  bool _isGrid = false;
   final List<Game> _games = List.of(sampleGames);
-
-  List<String> get _allTags {
-    final tags = {for (final game in _games) ...game.tags}.toList();
-    tags.sort();
-    return tags;
-  }
 
   List<Game> get _filteredGames {
     final query = _query.toLowerCase();
@@ -48,10 +37,6 @@ class _BacklogScreenState extends State<BacklogScreen> {
 
   void _onStatusSelected(GameStatus? status) =>
       setState(() => _selectedStatus = status);
-
-  void _onTagSelected(String? tag) => setState(() => _selectedTag = tag);
-
-  void _onViewChanged(bool isGrid) => setState(() => _isGrid = isGrid);
 
   void _onGameStatusChanged(Game game, GameStatus newStatus) {
     setState(() {
@@ -75,7 +60,6 @@ class _BacklogScreenState extends State<BacklogScreen> {
               children: [
                 Expanded(child: SearchField(onChanged: _onQueryChanged)),
                 const SizedBox(width: 12),
-                ViewToggle(isGrid: _isGrid, onChanged: _onViewChanged),
               ],
             ),
             const SizedBox(height: 12),
@@ -84,21 +68,24 @@ class _BacklogScreenState extends State<BacklogScreen> {
               onSelected: _onStatusSelected,
             ),
             const SizedBox(height: 8),
-            TagFilterBar(
-              tags: _allTags,
-              selected: _selectedTag,
-              onSelected: _onTagSelected,
-            ),
+          
             const SizedBox(height: 12),
-            SummaryBar(games: _games, shownCount: _filteredGames.length),
-            const SizedBox(height: 8),
             Expanded(
-              child: GameCollection(
-                games: _filteredGames,
-                isGrid: _isGrid,
-                onStatusChange: _onGameStatusChanged,
-              ),
+              child: _filteredGames.isEmpty
+                  ? const Center(child: Text('No games match your search or filters.'))
+                  : ListView.builder(
+                      itemCount: _filteredGames.length,
+                      itemBuilder: (context, index) {
+                        final game = _filteredGames[index];
+                        return GameCard(
+                          game: game,
+                          onStatusChange: (newStatus) =>
+                              _onGameStatusChanged(game, newStatus),
+                        );
+                      },
+                    ),
             ),
+          
           ],
         ),
       ),
