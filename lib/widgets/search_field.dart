@@ -7,15 +7,10 @@ class SearchField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return SearchBar(
+      hintText: 'Search title or genre...',
+      leading: const Icon(Icons.search),
       onChanged: onChanged,
-      decoration: const InputDecoration(
-        prefixIcon: Icon(Icons.search),
-        hintText: 'Search title or genre...',
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12)),
-        ),
-      ),
     );
   }
 }

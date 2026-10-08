@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'screens/backlog_screen.dart';
+import 'theme/app_theme.dart';
 
 void main() {
   runApp(const FandomVaultApp());
@@ -14,7 +14,9 @@ class FandomVaultApp extends StatelessWidget {
     return MaterialApp(
       title: 'Fandom Vault',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(colorSchemeSeed: Colors.deepPurple, useMaterial3: true),
+      theme: AppTheme.light(),
+      darkTheme: AppTheme.dark(),
+      themeMode: ThemeMode.system,
       home: const BacklogScreen(),
     );
   }

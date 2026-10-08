@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../models/game.dart';
-import 'status_badge.dart';
 import 'status_picker.dart';
 
-/// Grid-layout item.
 class GameGridTile extends StatelessWidget {
   const GameGridTile({
     super.key,
@@ -17,6 +15,8 @@ class GameGridTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
     final stars = game.rating > 0 ? '★' * game.rating : 'Unrated';
 
     return Card(
@@ -27,19 +27,23 @@ class GameGridTile extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             CircleAvatar(
-              backgroundColor: statusColor(game.status),
-              foregroundColor: Colors.white,
+              backgroundColor: scheme.secondaryContainer,
+              foregroundColor: scheme.onSecondaryContainer,
               child: Text(game.title[0]),
             ),
             Text(
               game.title,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.titleSmall,
+              style: theme.textTheme.titleMedium?.copyWith(
+                color: scheme.onSurface,
+              ),
             ),
             Text(
               '${game.platform} • ${game.hoursPlayed} h\n$stars',
-              style: Theme.of(context).textTheme.bodySmall,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: scheme.onSurfaceVariant,
+              ),
             ),
             StatusPicker(status: game.status, onSelected: onStatusChange),
           ],

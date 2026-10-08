@@ -1,21 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../models/game.dart';
+import '../theme/status_colors.dart';
 
-Color statusColor(GameStatus status) {
-  switch (status) {
-    case GameStatus.playing:
-      return Colors.green;
-    case GameStatus.finished:
-      return Colors.blue;
-    case GameStatus.dropped:
-      return Colors.red;
-    case GameStatus.backlog:
-      return Colors.orange;
-  }
-}
-
-/// Display-only coloured chip for a [GameStatus].
 class StatusBadge extends StatelessWidget {
   const StatusBadge({super.key, required this.status});
 
@@ -23,11 +10,11 @@ class StatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = statusColor(status);
+    final color = Theme.of(context).extension<StatusColors>()!.colorFor(status);
+
     return Chip(
+      avatar: Icon(Icons.circle, size: 12, color: color),
       label: Text(status.label),
-      labelStyle: TextStyle(color: color),
-      side: BorderSide(color: color),
       visualDensity: VisualDensity.compact,
     );
   }

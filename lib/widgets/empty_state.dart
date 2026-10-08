@@ -2,16 +2,26 @@ import 'package:flutter/material.dart';
 
 class EmptyState extends StatelessWidget {
   const EmptyState({super.key});
-
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    final theme = Theme.of(context);
+
+    return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.videogame_asset_off, size: 64, color: Colors.grey),
-          SizedBox(height: 12),
-          Text('No games match your search or filters.'),
+          Icon(
+            Icons.videogame_asset_off,
+            size: 64,
+            color: theme.colorScheme.outline,
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'No games match your search or filters.',
+            style: theme.textTheme.bodyLarge?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
         ],
       ),
     );
